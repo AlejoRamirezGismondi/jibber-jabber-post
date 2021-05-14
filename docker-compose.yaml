@@ -8,11 +8,11 @@ networks:
     driver: bridge
 
 volumes:
-  pgdata:
+  postdata:
 
 services:
   db:
-    container_name: docker-database
+    container_name: docker-database-post
     image: postgres:12
     restart: always
     env_file:
@@ -22,10 +22,10 @@ services:
     networks:
       - app-network
     volumes:
-    - pgdata:/var/lib/postgresql/data
+    - postdata:/var/lib/postgresql/data
 
   api:
-    container_name: api
+    container_name: api-post
     build:
       dockerfile: Dockerfile
       context: .
