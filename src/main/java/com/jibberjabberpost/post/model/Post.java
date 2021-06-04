@@ -2,7 +2,10 @@ package com.jibberjabberpost.post.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "post")
@@ -10,10 +13,6 @@ import javax.persistence.*;
 public class Post {
   @Id @GeneratedValue
   private Long id;
-  @Column(name = "title")
-  private String title;
-  @Column(name = "author")
-  private String author;
-  @Column(name = "body")
-  private String body;
+  private String title, body;
+  private Long authorId;
 }
