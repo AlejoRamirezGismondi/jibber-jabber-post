@@ -12,3 +12,7 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
+
+microservice:
+  user:
+    base-url: ${USER_BASE_URL}
