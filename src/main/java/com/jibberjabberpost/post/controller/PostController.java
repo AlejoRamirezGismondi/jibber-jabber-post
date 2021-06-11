@@ -1,9 +1,8 @@
 package com.jibberjabberpost.post.controller;
 
 import com.jibberjabberpost.post.model.Post;
+import com.jibberjabberpost.post.model.dto.PostDTO;
 import com.jibberjabberpost.post.service.PostService;
-import com.jibberjabberpost.post.service.UserService;
-import com.jibberjabberpost.post.service.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,16 +12,13 @@ import java.util.List;
 public class PostController {
   
   private final PostService postService;
-  private final UserService userService;
-  public PostController(PostService postService, UserServiceImpl userService) {
+  public PostController(PostService postService) {
     this.postService = postService;
-    this.userService = userService;
   }
   
   @PostMapping()
   public Post createPost(@RequestBody Post post, @RequestHeader("Authorization") String token) {
-    post.setAuthorId(userService.getUserId(token));
-    return postService.save(post);
+    return postService.save(post, token);
   }
   
   @GetMapping(path = "/{id}")
@@ -30,9 +26,9 @@ public class PostController {
     return postService.getPostById(id);
   }
   
-  @GetMapping(path = "/author/{id}")
-  public List<Post> getPostByAuthorId(@PathVariable Long id) {
-    return postService.getPostsByAuthorId(id);
+  @GetMapping(path = "/myPosts")
+  public List<Post> getMyPosts(@RequestHeader("Authorization") String token) {
+    return postService.getPostsByToken(token);
   }
   
   @GetMapping(path = "/all")
@@ -42,6 +38,21 @@ public class PostController {
   
   @DeleteMapping(path = "/{id}")
   public void deletePost(@PathVariable Long id, @RequestHeader("Authorization") String token) {
-    postService.delete(id, userService.getUserId(token));
+    postService.delete(id, token);
+  }
+  
+  @PutMapping(path = "/like/{id}")
+  public void likePost(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+    postService.like(id, token);
+  }
+  
+  @PutMapping(path = "/unlike/{id}")
+  public void unLikePost(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+    postService.unLike(id, token);
+  }
+  
+  @GetMapping(path = "/following")
+  public List<PostDTO> getPostsByFollowing(@RequestHeader("Authorization") String token) {
+    return postService.toDto(postService.getPostsByFollowing(token));
   }
 }

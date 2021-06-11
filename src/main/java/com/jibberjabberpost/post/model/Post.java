@@ -2,10 +2,9 @@ package com.jibberjabberpost.post.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -15,4 +14,14 @@ public class Post {
   private Long id;
   private String title, body;
   private Long authorId;
+  @ElementCollection @CollectionTable(name = "likes")
+  private List<Long> likeIds = new ArrayList<>();
+  
+  public void addLike(Long userId) {
+    likeIds.add(userId);
+  }
+  
+  public void removeLike(Long userId) {
+    likeIds.remove(userId);
+  }
 }

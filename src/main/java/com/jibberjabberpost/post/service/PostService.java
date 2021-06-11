@@ -1,7 +1,9 @@
 package com.jibberjabberpost.post.service;
 
 
+import com.jibberjabberpost.post.factory.PostFactory;
 import com.jibberjabberpost.post.model.Post;
+import com.jibberjabberpost.post.model.dto.PostDTO;
 import com.jibberjabberpost.post.repository.PostRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -9,17 +11,20 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
   
   private final PostRepository postRepository;
-  
-  public PostService(PostRepository postRepository) {
+  private final UserService userService;
+  public PostService(PostRepository postRepository, UserService userService) {
     this.postRepository = postRepository;
+    this.userService = userService;
   }
   
-  public Post save(Post post) {
+  public Post save(Post post, String token) {
+    post.setAuthorId(userService.getUserId(token));
     return postRepository.save(post);
   }
   
@@ -37,10 +42,45 @@ public class PostService {
     return postRepository.findPostByAuthorId(id);
   }
   
-  public void delete(Long id, Long userId) {
+  public void delete(Long id, String token) {
+    final Long userId = userService.getUserId(token);
     final Optional<Post> optional = postRepository.findById(id);
     if (!optional.isPresent()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
     if (!userId.equals(optional.get().getAuthorId())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not the owner");
     postRepository.deleteById(id);
+  }
+  
+  public void like(Long postId, String token) {
+    final Long userId = userService.getUserId(token);
+    final Post post = getPostById(postId);
+    post.addLike(userId);
+    postRepository.save(post);
+    userService.like(token, postId);
+  }
+  
+  public void unLike(Long postId, String token) {
+    final Long userId = userService.getUserId(token);
+    final Post post = getPostById(postId);
+    post.removeLike(userId);
+    postRepository.save(post);
+    userService.unLike(token, postId);
+  }
+  
+  public List<Post> getPostsByFollowing(String token) {
+    final List<Long> following = userService.getUserFollowing(token);
+    return following.stream().flatMap(f -> getPostsByAuthorId(f).stream()).collect(Collectors.toList());
+  }
+  
+  public List<PostDTO> toDto(List<Post> posts) {
+    return posts.stream().map(this::toDto).collect(Collectors.toList());
+  }
+  
+  public PostDTO toDto(Post post) {
+    return PostFactory.postToDTO(post);
+  }
+  
+  public List<Post> getPostsByToken(String token) {
+    final Long userId = userService.getUserId(token);
+    return getPostsByAuthorId(userId);
   }
 }
