@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,6 +55,8 @@ public class UserServiceImpl implements UserService {
   
   private List<Long> stringToLongList(String s) {
     final String[] split = s.replace("[", "").replace("]", "").split(",");
+    //in case the user is not following anybody
+    if (split[0].equals("")) return new ArrayList<>();
     return Arrays.stream(split).map(Long::parseLong).collect(Collectors.toList());
   }
   
