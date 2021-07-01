@@ -12,7 +12,7 @@ import java.util.List;
 public class Post {
   @Id @GeneratedValue
   private Long id;
-  private String title, body;
+  private String title, body, date;
   private Long authorId;
   @ElementCollection @CollectionTable(name = "likes")
   private List<Long> likeIds = new ArrayList<>();
