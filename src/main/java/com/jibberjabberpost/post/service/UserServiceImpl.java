@@ -36,13 +36,13 @@ public class UserServiceImpl implements UserService {
   @Override
   public void like(String token, Long postId) {
     final HttpEntity http = tokenToHttp(token);
-    restTemplate.exchange(url + "/like/" + postId, HttpMethod.PUT, http, String.class);
+    restTemplate.exchange(url + "/like/" + postId, HttpMethod.POST, http, String.class);
   }
   
   @Override
   public void unLike(String token, Long postId) {
     final HttpEntity http = tokenToHttp(token);
-    restTemplate.exchange(url + "/unlike/" + postId, HttpMethod.PUT, http, String.class);
+    restTemplate.exchange(url + "/unlike/" + postId, HttpMethod.POST, http, String.class);
   }
   
   @Override
