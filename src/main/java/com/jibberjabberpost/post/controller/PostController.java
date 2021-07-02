@@ -30,6 +30,11 @@ public class PostController {
   public List<Post> getMyPosts(@RequestHeader("Authorization") String token) {
     return postService.getPostsByToken(token);
   }
+
+  @GetMapping(path = "/author/{id}")
+  public List<Post> getPostByAuthorId(@PathVariable Long id) {
+    return postService.getPostsByAuthorId(id);
+  }
   
   @GetMapping(path = "/all")
   public List<Post> getAllPosts() {
