@@ -72,12 +72,17 @@ public class PostService {
     return following.stream().flatMap(f -> getPostsByAuthorId(f).stream()).collect(Collectors.toList());
   }
   
-  public List<PostDTO> toDto(List<Post> posts) {
-    return posts.stream().map(this::toDto).collect(Collectors.toList());
+  public List<PostDTO> toDto(List<Post> posts, String token) {
+    final Long userId = userService.getUserId(token);
+    return posts.stream().map(e -> toDto(e, userId)).collect(Collectors.toList());
   }
   
-  public PostDTO toDto(Post post) {
-    return PostFactory.postToDTO(post);
+  public PostDTO toDto(Post post, String token) {
+    return toDto(post, userService.getUserId(token));
+  }
+  
+  public PostDTO toDto(Post post, Long userId) {
+    return PostFactory.postToDTO(post, userId);
   }
   
   public List<Post> getPostsByToken(String token) {
