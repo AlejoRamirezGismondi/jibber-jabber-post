@@ -32,6 +32,13 @@ public class UserServiceImpl implements UserService {
     final ResponseEntity<String> exchange = restTemplate.exchange(url + "/id", HttpMethod.GET, http, String.class);
     return Long.parseLong(exchange.getBody());
   }
+
+  @Override
+  public String getUserFirstName(String token) {
+    HttpEntity http = tokenToHttp(token);
+    final ResponseEntity<String> exchange = restTemplate.exchange(url + "/firstName", HttpMethod.GET, http, String.class);
+    return exchange.getBody();
+  }
   
   @Override
   public void like(String token, Long postId) {

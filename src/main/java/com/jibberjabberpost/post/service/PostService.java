@@ -25,6 +25,7 @@ public class PostService {
   
   public Post save(Post post, String token) {
     post.setAuthorId(userService.getUserId(token));
+    post.setFirstName(userService.getUserFirstName(token));
     return postRepository.save(post);
   }
   
