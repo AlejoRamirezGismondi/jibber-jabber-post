@@ -32,8 +32,8 @@ public class PostController {
   }
 
   @GetMapping(path = "/author/{id}")
-  public List<Post> getPostByAuthorId(@PathVariable Long id) {
-    return postService.getPostsByAuthorId(id);
+  public List<PostDTO> getPostByAuthorId(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+    return postService.toDto(postService.getPostsByAuthorId(id), token);
   }
   
   @GetMapping(path = "/all")
