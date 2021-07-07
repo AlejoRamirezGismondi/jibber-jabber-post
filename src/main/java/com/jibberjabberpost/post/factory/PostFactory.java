@@ -5,15 +5,15 @@ import com.jibberjabberpost.post.model.dto.PostDTO;
 
 public class PostFactory {
   
-  public static PostDTO postToDTO(Post post) {
+  public static PostDTO postToDTO(Post post, Long userId) {
     return new PostDTO(
             post.getFirstName(),
             post.getDate(),
             post.getId(),
-            post.getTitle(),
             post.getBody(),
             post.getAuthorId(),
-            (long) post.getLikeIds().size()
+            (long) post.getLikeIds().size(),
+            post.getLikeIds().contains(userId)
     );
   }
   

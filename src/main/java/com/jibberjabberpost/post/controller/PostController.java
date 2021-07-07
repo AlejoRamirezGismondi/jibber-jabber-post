@@ -17,28 +17,28 @@ public class PostController {
   }
   
   @PostMapping()
-  public Post createPost(@RequestBody Post post, @RequestHeader("Authorization") String token) {
-    return postService.save(post, token);
+  public PostDTO createPost(@RequestBody Post post, @RequestHeader("Authorization") String token) {
+    return postService.toDto(postService.save(post, token), token);
   }
   
   @GetMapping(path = "/{id}")
-  public Post getPostById(@PathVariable Long id) {
-    return postService.getPostById(id);
+  public PostDTO getPostById(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+    return postService.toDto(postService.getPostById(id), token);
   }
   
   @GetMapping(path = "/myPosts")
-  public List<Post> getMyPosts(@RequestHeader("Authorization") String token) {
-    return postService.getPostsByToken(token);
+  public List<PostDTO> getMyPosts(@RequestHeader("Authorization") String token) {
+    return postService.toDto(postService.getPostsByToken(token), token);
   }
 
   @GetMapping(path = "/author/{id}")
-  public List<Post> getPostByAuthorId(@PathVariable Long id) {
-    return postService.getPostsByAuthorId(id);
+  public List<PostDTO> getPostByAuthorId(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+    return postService.toDto(postService.getPostsByAuthorId(id), token);
   }
   
   @GetMapping(path = "/all")
-  public List<Post> getAllPosts() {
-    return postService.getAll();
+  public List<PostDTO> getAllPosts(@RequestHeader("Authorization") String token) {
+    return postService.toDto(postService.getAll(), token);
   }
   
   @DeleteMapping(path = "/{id}")
@@ -58,6 +58,6 @@ public class PostController {
   
   @GetMapping(path = "/following")
   public List<PostDTO> getPostsByFollowing(@RequestHeader("Authorization") String token) {
-    return postService.toDto(postService.getPostsByFollowing(token));
+    return postService.toDto(postService.getPostsByFollowing(token), token);
   }
 }
