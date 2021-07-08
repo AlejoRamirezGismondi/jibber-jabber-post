@@ -34,9 +34,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public String getUserFirstName(String token) {
+  public String getUserUserName(String token) {
     HttpEntity http = tokenToHttp(token);
-    final ResponseEntity<String> exchange = restTemplate.exchange(url + "/firstName", HttpMethod.GET, http, String.class);
+    final ResponseEntity<String> exchange = restTemplate.exchange(url + "/userName", HttpMethod.GET, http, String.class);
     return exchange.getBody();
   }
   
