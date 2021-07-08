@@ -7,7 +7,7 @@ import java.util.List;
 @Service
 public interface UserService {
   Long getUserId(String token);
-  String getUserFirstName(String token);
+  String getUserUserName(String token);
   
   void like(String token, Long postId);
   void unLike(String token, Long postId);

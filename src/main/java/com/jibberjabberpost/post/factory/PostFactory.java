@@ -7,7 +7,7 @@ public class PostFactory {
   
   public static PostDTO postToDTO(Post post, Long userId) {
     return new PostDTO(
-            post.getFirstName(),
+            post.getUserName(),
             post.getDate(),
             post.getId(),
             post.getBody(),
